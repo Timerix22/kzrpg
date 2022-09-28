@@ -10,3 +10,6 @@ obj/
 *.user
 *.vcxproj.filters
 .config
+
+# dependencies builds
+deps/

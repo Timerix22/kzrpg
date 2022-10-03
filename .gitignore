@@ -9,7 +9,7 @@ obj/
 .editorconfig
 *.user
 *.vcxproj.filters
-.config
+current.config
 
 # dependencies builds
 deps/

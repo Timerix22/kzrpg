@@ -1,21 +1,33 @@
-#include <GL/gl.h>
-#define SDL_MAIN_HANDLED
-#include <SDL/SDL.h>
+#include "graphical_APIs.h" 
 #include "../kerep/src/base/base.h"
+#include "GameWindow.h"
 
-#define sdlErrCheck(_STATEMENT) if(_STATEMENT) throw(cptr_concat("SDL error:\n" #_STATEMENT "\n", SDL_GetError()))
+void testGameLoop(GameWindow* gameWindow,float deltaT){
+
+}
+
+void consoleFpsCallback(uint16 fps){
+    kprintf("\e[37mframes: %u\n",fps);
+}
 
 int main(){
     setlocale(LC_ALL, "en-US.Unicode");
-    printf("hello!\n");
+    kprintf("\e[94mkzrpg is starting...\n");
+    // kerep init
     ktDescriptors_beginInit();
     ktDescriptors_initKerepTypes();
     ktDescriptors_endInit();
-    ktDescriptor desc=ktDescriptor_get(ktId_Bool);
-    printf("name: %s id: %u size: %u\n", desc.name, desc.id, desc.size);
+    // sdl init
     sdlErrCheck(SDL_Init(SDL_INIT_VIDEO)!=0);
-    SDL_Window* win=SDL_CreateWindow("UwU",50,50,666,228, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
-    sdlErrCheck(win==NULL);
-    getc(stdin);
+    GameWindow* gameWindow=GameWindow_create("kzrpg", (SDL_Rect){600,300,800,600}, false, true, testGameLoop);
+    gameWindow->fpsCallback=consoleFpsCallback;
+    // start game
+    kprintf("\e[92mkzrpg started\n");
+    GameWindow_startLoop(gameWindow);
+    // exit
+    kprintf("\e[94mkzrpg is exiting...\n");
+    GameWindow_free(gameWindow);
+    SDL_Quit();
+    kprintf("\e[92mkzrpg exited\n");
     return 0;
 }
